@@ -15,9 +15,6 @@ def get_session():
         yield session
 app = FastAPI()
 
-print(enums.ConditonProperty.regex.value[0])
-print("hi")
-
 
 email_regex = r'^[A-Za-z0-9\.]+@[\w]+\.[\w]+$'
 cnss_regex = r'^\d{8}-\d{2}$'

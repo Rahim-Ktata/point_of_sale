@@ -13,14 +13,16 @@ def get_employee_by_id(db: Session, id: int):
     # select * from employee where id = id limit 1
     return db.query(models.Employee).filter(models.Employee.id == id).first()
 
-def get_employee_by_mail(db: Session, mail: str):
+def get_employee_by_email(db: Session, email: str):
     # select * from employee where id = id limit 1
-    return db.query(models.Employee).filter(models.Employee.mail == mail).first()
+    return db.query(models.Employee).filter(models.Employee.email == email).first()
 
 # skip & limit : used for pagination
 def get_all_employees(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Employee).offset(skip).limit(limit).all()
 
+def get_employee_roles(db: Session, employee_id: str):
+    return db.query(models.EmployeeRole).filter(models.EmployeeRole.employee_id == employee_id).all()
 
 async def create_employee(db: Session, employee: schemas.EmployeeCreate):
 

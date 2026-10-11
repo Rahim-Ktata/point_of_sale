@@ -24,21 +24,18 @@ class EmployeeBase(MyBaseModel):
     account_status : AccountStatus = AccountStatus.INACTIVE
     phone_number : str | None = None
 
+class EmployeeInDB(EmployeeBase):
+    id: int  
+    password: str | None
+    created_on: datetime
+    roles: List[Role]
 
-class Employee(EmployeeBase):
-    # id: int | None = Field(default=None, primary_key=True)
-    # secret_name: str
-    pass
 
 class EmployeePublic(EmployeeBase):
     id: int
 
 
 class EmployeeCreate(EmployeeBase):
-    # the password can be null cuz admin create employee account,
-    # the employee gets mail and sets his password
-    # password : str | None = None
-    # confirm_password : str | None = None
     created_on : datetime
     roles: List[Role]
 

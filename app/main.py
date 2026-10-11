@@ -1,9 +1,15 @@
-from fastapi import BackgroundTasks, FastAPI, Depends, HTTPException
+from datetime import datetime, timedelta, timezone
+from alembic.util import status
+from fastapi import BackgroundTasks, FastAPI, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from . import crud, schemas, database, utils
 from fastapi.middleware.cors import CORSMiddleware
 from sqlmodel import  Session
-from app import models
+from app import enums, models
+from pwdlib import PasswordHash
+import jwt
+from jwt.exceptions import InvalidTokenError
+
 
 
 def get_session():
@@ -24,64 +30,162 @@ app.add_middleware(
 #############################################################################################
 
 
+
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
-def fake_hash_password(password: str):
-    return "fakehashed" + password
+# TODO: access from .env
+SECRET_KEY = "3feca2ed9ab61a17df0c5a89056bb6fa1ee3e1839c34658b0c1b60a52bf81db8"
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
-# class User()
-# class UserInDB()
+password_hash = PasswordHash.recommended()
 
-def get_user(db, username: str):
-    if username in db:
-        user_dict = db[username]
-        return UserInDB(**user_dict)
+def verify_password(plain_password, hashed_password):
+    try:
+        return password_hash.verify(plain_password, hashed_password)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=utils.get_err_msg(str(e)))
 
-def fake_decode_token(token):
-    # This doesn't provide any security at all
-    # Check the next version
-    user = get_user(fake_users_db, token)
-    return user
 
-async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
-    user = fake_decode_token(token)
-    if not user:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Not authenticated",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-    return user
+def get_password_hash(password):
+    return password_hash.hash(password)
 
-async def get_current_active_user(
-    current_user: Annotated[User, Depends(get_current_user)],
+
+def get_emp(email:str, db: Session = Depends(get_session)):
+    try:
+        emp = crud.get_employee_by_email(db=db,email=email)
+    except Exception as e:
+        raise HTTPException(status_code=404,detail="sth went wrong")
+    if emp:
+        try:
+            roles = crud.get_employee_roles(db=db,employee_id=emp.id)
+        except Exception as e:
+            raise HTTPException(status_code=404,detail="sth went wrong")
+
+        roles_list = []
+        for role in roles:
+            roles_list.append(role.role.value)
+        keys = list(emp.__dict__.keys())
+        needed_keys = []
+        for key in keys:
+            if(key[0]!='_' and key!='roles'):
+                needed_keys.append(key)
+        emp_data = {}
+        emp_data['roles']= roles_list
+        for key in needed_keys:
+            emp_data[key]=getattr(emp,key)
+
+        return schemas.EmployeeInDB(**emp_data)
+
+
+def authenticate_emp(email: str, password: str, db: Session = Depends(get_session)):
+    emp = get_emp(db=db, email=email)
+    if not emp:
+        # verify_password(password, DUMMY_HASH)
+        return False
+    if not verify_password(plain_password=password, hashed_password=emp.password):
+        return False
+    return emp
+
+
+def create_access_token(data: dict, expires_delta: timedelta | None = None):
+    to_encode = data.copy()
+    if expires_delta:
+        expire = datetime.now(timezone.utc) + expires_delta
+    else:
+        expire = datetime.now(timezone.utc) + timedelta(minutes=15)
+    to_encode.update({"exp": expire})
+    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return encoded_jwt
+
+
+async def get_current_emp(token:str = Depends(oauth2_scheme), db:Session = Depends(get_session)):
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        email = payload.get("email")
+        if email is None:
+            raise credentials_exception
+        # TODO: add the rest of info from payload to the TokenData
+        token_data = schemas.TokenData(email=email)
+    except InvalidTokenError:
+        raise credentials_exception
+    emp = get_emp(db=db, email=token_data.email)
+    if emp is None:
+        raise credentials_exception
+    return emp
+
+
+async def get_current_active_emp(
+    current_emp: schemas.EmployeeInDB = Depends(get_current_emp) ,
 ):
-    if current_user.disabled:
-        raise HTTPException(status_code=400, detail="Inactive user")
-    return current_user
+    if current_emp.account_status == enums.AccountStatus.INACTIVE:
+        raise HTTPException(status_code=400, detail="Inactive account")
+    return current_emp
+
 
 @app.post("/token")
-async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
-    user_dict = fake_users_db.get(form_data.username)
-    if not user_dict:
-        raise HTTPException(status_code=400, detail="Incorrect username or password")
-    user = UserInDB(**user_dict)
-    hashed_password = fake_hash_password(form_data.password)
-    if not hashed_password == user.hashed_password:
-        raise HTTPException(status_code=400, detail="Incorrect username or password")
+async def login_for_access_token(
+    form_data: OAuth2PasswordRequestForm=Depends(),
+    db:Session = Depends(get_session)
+) -> schemas.Token:
+    emp = authenticate_emp(db=db, email=form_data.username, password=form_data.password)
+    if not emp:
+        raise HTTPException(
+            status_code=401,
+            detail="Incorrect username or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    payload_keys = [
+            "first_name",
+            "last_name",
+            "email",
+            "number",
+            "birth_date",
+            "address",
+            "cnss_number",
+            "contract_type",
+            "gender",
+            "account_status",
+            "phone_number",
+            "created_on",
+            "roles",
+            "id",
+        ]
+    payload_data = {}
+    for key in payload_keys:
+        payload_data[key]= getattr(emp, key)
+    payload_data['birth_date'] = payload_data["birth_date"].isoformat()
+    payload_data['created_on'] = payload_data['created_on'].isoformat()
+    payload_data['contract_type']= payload_data['contract_type'].value
+    payload_data['account_status']= payload_data['account_status'].value
+    payload_data['gender']= payload_data['gender'].value
+    for role in payload_data['roles']:
+        role = role.value
+    payload_data['roles'] = ' '.join(payload_data['roles'])
+    access_token = create_access_token(
+        data=payload_data, expires_delta=access_token_expires
+    )
+    return schemas.Token(access_token=access_token, token_type="bearer")
 
-    return {"access_token": user.username, "token_type": "bearer"}
 
-@app.get("/users/me")
+@app.get("/users/me/")
 async def read_users_me(
-    current_user: Annotated[User, Depends(get_current_active_user)],
+    current_emp: schemas.EmployeeInDB = Depends(get_current_active_emp),
+) -> schemas.EmployeeInDB:
+    return current_emp
+
+
+@app.get("/users/me/items/")
+async def read_own_items(
+    current_user: schemas.EmployeeInDB= Depends(get_current_active_emp),
 ):
-    return current_user
-
-
-@app.get("/hi")
-def hi(token: str = Depends(oauth2_scheme)):
-    return {token:token}
+    return [{"item_id": "Foo", "owner": current_user.first_name}]
 
 
 #############################################################################################

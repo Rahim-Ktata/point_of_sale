@@ -41,13 +41,14 @@ def update_account_status_and_pswd(session : Session, token_code:str, password:A
     # ---------------- PSWD ------------------------------------------------
     # ----------------------------------------------------------------------
     # ------------------ verify password ------------------------------------
-    err_msg = utils.verifyPassword(password=password, confirm_password=confirm_password)
+    err_msg = utils.verify_plain_password(password=password, confirm_password=confirm_password)
     if err_msg:
         raise HTTPException(status_code=400, detail=err_msg)
     # ------------------- hash password add it to db -------------------------
     #TODO: hash pswd
+    hashed_password = utils.get_password_hash(password)
     try:
-        crud.update_employee_password(session=session, employee_id=token_db.employee_id,password=password)
+        crud.update_employee_password(session=session, employee_id=token_db.employee_id,password=hashed_password)
     except Exception as e:
         session.rollback()
         crud.add_error(db=session, text=str(e))
