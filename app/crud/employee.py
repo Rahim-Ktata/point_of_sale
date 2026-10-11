@@ -6,7 +6,7 @@ from app.enums import TokenStatus
 from fastapi import FastAPI, Depends, status, HTTPException
 
 from sqlalchemy.orm import Session
-from app import emailUtil
+from app.utils import emailUtil
 
 
 def get_employee_by_id(db: Session, id: int):

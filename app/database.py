@@ -11,7 +11,8 @@ from app.config import settings
 SQLALCHEMY_DATABASE_URL = f'postgresql://{settings.database_username}:{settings.database_password}@{settings.database_hostname}:{settings.database_port}/{settings.database_name}'
 
 # echo = true : show executed sql queries in terminal
-engine = create_engine(SQLALCHEMY_DATABASE_URL, echo=True)
+# engine = create_engine(SQLALCHEMY_DATABASE_URL, echo=True)
+engine = create_engine(SQLALCHEMY_DATABASE_URL)
 # use session as black box for now
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 

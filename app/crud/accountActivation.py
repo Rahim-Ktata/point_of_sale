@@ -3,7 +3,7 @@ from app import models, schemas, crud, enums, utils
 from fastapi import FastAPI, Depends, status, HTTPException
 from app.models import Employee, AccountActivation
 from sqlalchemy.orm import Session
-from app import emailUtil
+from app.utils import emailUtil
 from app.enums import AccountStatus, TokenStatus
 
 # try catch whenever u call one of those crud``

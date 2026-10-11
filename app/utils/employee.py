@@ -5,10 +5,11 @@ import re
 import uuid
 
 from fastapi import FastAPI, Depends, status, HTTPException
-from app import emailUtil, schemas, enums, models, database, crud, utils
+from app import schemas, enums, models, database, crud, utils
 from sqlmodel import Field, Session, create_engine, select
 
 from app.enums.tokenStatus import TokenStatus
+from app.utils import emailUtil
 
 def get_session():
     with Session(database.engine) as session:

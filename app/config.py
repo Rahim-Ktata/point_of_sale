@@ -7,20 +7,24 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 # u can set defaults so no err when it don't find sth in env vars
 # if no defaults and no env var found => ValidationError
 class Settings(BaseSettings):
-    database_hostname: str= "localhost"
-    database_port: str= "5432"
-    database_password: str= ""
-    database_name: str= "pos_db"
-    database_username: str= "postgres"
+    database_hostname: str
+    database_port: str
+    database_password: str
+    database_name: str
+    database_username: str
+
+    mail_username: str
+    mail_password: str
+    mail_from: str
+    mail_server: str
+    mail_port: int
+
+    secret_key: str
+    algorithm: str
+    access_token_expire_minutes: int
+
+    model_config = SettingsConfigDict(env_file="app/.env")
 
 
-    mail_username: str= "abdouktata2@gmail.com"
-    mail_password: str= "pcwn ujmu viqs xxxx"
-    mail_from: str= "abdouktata2@gmail.com"
-    mail_server: str= "smtp.gmail.com"
-    mail_port: int=587
-
-    model_config = SettingsConfigDict(env_file=".env")
-
-
+# settings = Settings(_env_file='app/.env')
 settings = Settings()

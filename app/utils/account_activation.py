@@ -5,13 +5,13 @@ from datetime import datetime
 from app.utils.errors import get_err_msg
 
 
-def verifyToken(token_code:str, session: Session):
+def verifyToken(token_code:str, db: Session):
 
     # ----------------- check token exist -------------------------------
     try:
-        token_db = crud.get_confirmation_token(db= session, code=token_code)
+        token_db = crud.get_confirmation_token(db= db, code=token_code)
     except Exception as e:
-        crud.add_error(db=session,text=str(e))
+        crud.add_error(db=db,text=str(e))
         raise HTTPException(status_code=500, detail=utils.get_err_msg(str(e)))
     if not token_db:
         raise HTTPException(status_code=399, detail="token does not exist")

@@ -6,7 +6,7 @@ from fastapi_mail import ConnectionConfig, FastMail, MessageSchema, MessageType,
 from pydantic import BaseModel
 from starlette.responses import JSONResponse
 
-from .config import settings
+from app.config import settings
 
 
 # class EmailSchema(BaseModel):
@@ -23,7 +23,7 @@ conf = ConnectionConfig(
     MAIL_SSL_TLS=False,
     USE_CREDENTIALS=True,
     VALIDATE_CERTS=True,
-    TEMPLATE_FOLDER = Path(__file__).parent / 'templates',
+    TEMPLATE_FOLDER = Path(__file__).parent.parent / 'templates',
 )
 
 app = FastAPI()
