@@ -7,3 +7,4 @@ from .role import Role
 from .matchyComparer import Comparer
 from .matchyConditionProperty import ConditonProperty
 from .matchyFieldType import FieldType
+from .emailTemplates import EmailTemplate

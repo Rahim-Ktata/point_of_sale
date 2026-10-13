@@ -1,7 +1,11 @@
 
 from sqlalchemy import Column, Integer, String, Enum, DateTime, Date, func, CheckConstraint
+
+from app.models.employeeRole import EmployeeRole
 from ..database import Base
 from app.enums import Gender, ContractType, AccountStatus
+from sqlalchemy.orm import relationship
+
 
 
 class Employee(Base):
@@ -21,6 +25,7 @@ class Employee(Base):
     account_status = Column(Enum(AccountStatus), nullable=False, default=AccountStatus.INACTIVE)
     phone_number = Column(String, nullable=True)
     created_on = Column(DateTime, nullable=False, server_default=func.now())
+    roles =  relationship(EmployeeRole)
 
     __table_args__ = (
         CheckConstraint(

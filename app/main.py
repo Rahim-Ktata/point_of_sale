@@ -1,13 +1,21 @@
 from fastapi import FastAPI, Depends
+from app import crud
+from app.dependencies import DbDep
 from app.utils.Oauth2 import get_current_active_emp
 from . import schemas
 from fastapi.middleware.cors import CORSMiddleware
-from .routers import employee,employee_bulk_upload
+from .routers import employee,employee_bulk_upload, auth, password_reset
+
 
 
 app = FastAPI()
+
+
+
 app.include_router(employee.router)
 app.include_router(employee_bulk_upload.router)
+app.include_router(auth.router)
+app.include_router(password_reset.router)
 
 
 app.add_middleware(
@@ -39,5 +47,5 @@ async def read_own_items(
 
 
 @app.get("/")
-def main():
-    pass
+def hi(db:DbDep, id:int):
+    return crud.get_employee_by_id(db=db, id=id)

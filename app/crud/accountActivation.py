@@ -3,7 +3,7 @@ from app import models, schemas, crud, enums, utils
 from fastapi import FastAPI, Depends, status, HTTPException
 from app.models import Employee, AccountActivation
 from sqlalchemy.orm import Session
-from app.utils import emailUtil
+from app.externel_services import email_service
 from app.enums import AccountStatus, TokenStatus
 
 # try catch whenever u call one of those crud``
@@ -45,7 +45,6 @@ def update_account_status_and_pswd(session : Session, token_code:str, password:A
     if err_msg:
         raise HTTPException(status_code=400, detail=err_msg)
     # ------------------- hash password add it to db -------------------------
-    #TODO: hash pswd
     hashed_password = utils.get_password_hash(password)
     try:
         crud.update_employee_password(session=session, employee_id=token_db.employee_id,password=hashed_password)
@@ -57,4 +56,3 @@ def update_account_status_and_pswd(session : Session, token_code:str, password:A
     session.commit()
 
     return schemas.AccountActivationOut(msg="account confirmed", status_code=status.HTTP_200_OK)
-

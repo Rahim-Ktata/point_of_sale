@@ -5,7 +5,6 @@
     "version": "0.2.0",
     "configurations": [
         
-
         {
             "name": "Python Debugger: FastAPI",
             "type": "debugpy",
@@ -19,3 +18,22 @@
         }
     ]
 }
+
+// {
+//     "version": "0.2.0",
+//     "configurations": [
+//         {
+//             "name": "Debug FastAPI with UV",
+//             "type": "debugpy",
+//             "request": "launch",
+//             "module": "fastapi",
+//             "args": [
+//                 "dev",
+//                 "app.main:app"
+//             ],
+//             "python": "${workspaceFolder}/.venv/bin/python",
+//             "jinja": true,
+//             "justMyCode": true
+//         }
+//     ]
+// }

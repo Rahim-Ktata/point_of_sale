@@ -23,3 +23,15 @@ def account_confirmation(accountActivation: schemas.AccountActivation, db: DbDep
         password=accountActivation.password,
         confirm_password=accountActivation.confirm_password
     )
+
+@router.patch("/edit_employee", response_model=schemas.EditEmployeeOut)
+def edit_employee(employee_id: int, entry:schemas.EditEmployeeEntry, db:DbDep):
+    return crud.edit_employee(
+        employee_id=employee_id,
+        entry= entry, 
+        db= db    
+    )
+
+@router.get("/get_all_employees", response_model=schemas.GetAllEmployees)
+def get_employees(db:DbDep, skip: int =0, limit: int =15):
+    return crud.get_all_employees(db=db, skip=skip, limit=limit)

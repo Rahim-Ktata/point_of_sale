@@ -3,6 +3,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from app.dependencies import DbDep
 from app import schemas
+from app.utils.Oauth2 import authenticate_emp, create_access_token
+from app.config import settings
 
 router = APIRouter(
     # prefix='/auth',
@@ -10,7 +12,7 @@ router = APIRouter(
 )
 
 
-@router.post("/token")
+@router.post("/token", response_model=schemas.Token)
 async def login_for_access_token(
     db:DbDep,
     form_data: OAuth2PasswordRequestForm=Depends()
@@ -22,7 +24,7 @@ async def login_for_access_token(
             detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token_expires = timedelta(minutes=settings.access_token_expire_minutes)
     payload_keys = [
             "first_name",
             "last_name",

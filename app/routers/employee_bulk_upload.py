@@ -4,7 +4,7 @@ from app.dependencies import DbDep
 from app import schemas, utils
 
 router = APIRouter(
-    tags=["Bulk upload Employees"]
+    tags=["Bulk Upload Employees"]
 )
 
 
@@ -37,5 +37,3 @@ async def employees_validation_and_bulk_upload(
         force_upload=entry.force_upload,
         db=session
     )
-
-

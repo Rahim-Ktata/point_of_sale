@@ -9,7 +9,7 @@ from app import schemas, enums, models, database, crud, utils
 from sqlmodel import Field, Session, create_engine, select
 
 from app.enums.tokenStatus import TokenStatus
-from app.utils import emailUtil
+from app.externel_services import email_service
 
 def get_session():
     with Session(database.engine) as session:
@@ -311,7 +311,7 @@ def validate_employees_data_and_upload(employees: list, force_upload: bool, back
             employees_mails[emp.email] = emp.__dict__
 
         for token in tokens_to_add:
-            background_tasks.add_task(emailUtil.simple_send,[token.email], {**employees_mails[token.email],'token':token.token})
+            background_tasks.add_task(email_service.simple_send,[token.email], {**employees_mails[token.email],'token':token.token})
 
         db.commit()
 
