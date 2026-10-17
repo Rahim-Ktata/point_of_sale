@@ -3,7 +3,7 @@ from app.schemas.accountActivation import MyBaseModel
 
 class ForgetPasswordOut(MyBaseModel):
     msg: str
-    status_code: str
+    status_code: int
 
 class ResetPasswordEntry(MyBaseModel):
     token : str
@@ -12,4 +12,4 @@ class ResetPasswordEntry(MyBaseModel):
 
 class ResetPasswordOut(MyBaseModel):
     msg: str
-    status_code: str
+    status_code: int

@@ -3,7 +3,7 @@ import pytest
 from sqlalchemy import StaticPool, create_engine
 from sqlalchemy.orm import sessionmaker
 
-from app import schemas
+from app import models, schemas
 from app.database import Base
 from app.dependencies import get_session
 from app.utils.Oauth2 import get_current_active_emp
@@ -87,3 +87,13 @@ def test_db():
         db.close()
         Base.metadata.drop_all(bind = engine) # drop tables after test
         app.dependency_overrides.clear()
+
+
+
+
+
+def get_emp_account_activation_token(test_db):
+    return test_db.query(models.AccountActivation).filter(models.AccountActivation.employee_id==1).first().token
+
+def get_emp_reset_password_token(test_db):
+    return test_db.query(models.ResetPassword).filter(models.ResetPassword.employee_id==1).first().token

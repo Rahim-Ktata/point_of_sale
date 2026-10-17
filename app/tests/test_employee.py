@@ -1,11 +1,8 @@
 import copy
-
 from fastapi.testclient import TestClient
-
-from app import enums, models
-from ..config import settings
+from app import models
 from app.main import app
-from app.tests.conftest import test_db
+from app.tests.conftest import get_emp_account_activation_token
 
 client = TestClient(app)
 
@@ -26,8 +23,6 @@ data= {
     ]
 }
 
-def get_emp_account_activation_token(test_db):
-    return test_db.query(models.AccountActivation).filter(models.AccountActivation.employee_id==1).first().token
 
 
 # -------------------- /employee/add_employee -------------------------

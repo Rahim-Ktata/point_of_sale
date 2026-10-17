@@ -23,6 +23,10 @@ async def send_reset_code_email(email:str, db:DbDep):
     if not emp:
         raise HTTPException(status_code=404, detail="email is not registered!")
 
+    # ------------------ verify emp account is active --------------------------------
+    if(emp.account_status.value != "ACTIVE"):
+        raise HTTPException(status_code=400, detail="The requested account is inactive!")
+
     #----------------- store a token -------------------------
     db_token = models.ResetPassword(
         employee_id = emp.id,
@@ -52,7 +56,7 @@ async def send_reset_code_email(email:str, db:DbDep):
         raise HTTPException(status_code=500, detail=utils.get_err_msg(str(e)))
 
     #TODO: fix status_code isn't string
-    return schemas.ForgetPasswordOut(msg="email sent successfully", status_code='HTTP_200_OK')
+    return schemas.ForgetPasswordOut(msg="email sent successfully", status_code=200)
 
 
 
@@ -96,9 +100,9 @@ def reset_password(
     password: str,
     confirm_password: str
 ):
+    
     # ------------------ verify token --------------------------------------
     verifyPswdResetToken(db=db, token_code=token_code)
-
 
     # ------------------ get token from db (needed for emp_id later) --------
     try:
@@ -106,6 +110,11 @@ def reset_password(
     except Exception as e:
         crud.add_error(db=db,text=str(e))
         raise HTTPException(status_code=500, detail=utils.get_err_msg(str(e)))
+
+    # ------------------ verify emp account is active --------------------------------
+    emp_in_db = crud.get_employee_by_id(db=db, id=token_db.employee_id)
+    if(emp_in_db.account_status.value != "ACTIVE"):
+        raise HTTPException(status_code=400, detail="The requested account is inactive!")
 
     # ------------------- verify password -----------------------------------
     err_msg = utils.verify_plain_password(password=password, confirm_password=confirm_password)
@@ -129,4 +138,4 @@ def reset_password(
         crud.add_error(db=db, text=str(e))
         raise HTTPException(status_code=500, detail=utils.get_err_msg(str(e)))
 
-    return schemas.ResetPasswordOut(msg="Password reset successfully!", status_code='HTTP_200_OK')
+    return schemas.ResetPasswordOut(msg="Password reset successfully!", status_code=200)

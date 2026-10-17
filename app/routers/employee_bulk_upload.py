@@ -8,12 +8,12 @@ router = APIRouter(
 )
 
 
-@router.get("/possibleFields")
+@router.get("/possible_fields")
 def get_possible_import_fields(session: DbDep):
     return schemas.ImportPossibleFields(possible_fields=utils.options)
 
 
-@router.post("/employeesBulkUpload")
+@router.post("/employees_bulk_upload")
 async def employees_validation_and_bulk_upload(
     entry: schemas.MatchyUploadEntry,
     background_tasks:BackgroundTasks,
