@@ -32,4 +32,8 @@ class Employee(Base):
             "(contract_type IN ('CDI', 'CDD') AND cnss_number IS NOT NULL AND cnss_number ~ '^\\d{8}-\\d{2}$') OR (contract_type IN ('APPRENTI', 'SIVP') AND (cnss_number IS NULL OR cnss_number ~ '^\\d{8}-\\d{2}$'))",
             name='ck_employees_cnss_number'
         ),
+        CheckConstraint(
+            "phone_number ~ '^\\d{8}$'",
+            name='ck_employee_phone_number'
+        ),
     )

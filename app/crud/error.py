@@ -4,8 +4,10 @@ from app import models, schemas
 
 from sqlalchemy.orm import Session
 
+from app.dependencies import DbDep
 
-def add_error(db: Session, text):
+
+def add_error(db: DbDep, text):
     try:
         error = models.Error(text=text)
         db.add(error)

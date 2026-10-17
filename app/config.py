@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     database_port: str
     database_password: str
     database_name: str
+    test_db_name: str
     database_username: str
 
     mail_username: str
@@ -24,7 +25,7 @@ class Settings(BaseSettings):
     access_token_expire_minutes: int
 
     model_config = SettingsConfigDict(env_file="app/.env")
-
+    TEST_DB_URL: str
 
 # settings = Settings(_env_file='app/.env')
 settings = Settings()

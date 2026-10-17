@@ -1,5 +1,10 @@
 
 
+from typing import Annotated
+
+from fastapi.security import OAuth2PasswordBearer
+from sqlmodel import Session
+
 from app.config import settings
 
 from jwt.exceptions import InvalidTokenError
@@ -9,12 +14,24 @@ from datetime import datetime, timedelta, timezone
 from fastapi import Depends, HTTPException
 import jwt
 
-from app import crud, enums, schemas
-from app.dependencies import DbDep, oauth2_scheme
+from app import database, enums, schemas
+# from app.dependencies import DbDep, oauth2_scheme
 from app.utils.password import verify_hashed_password
 
 
+
+# ============== duplicated code from dependencies to avoid circular import ========== 
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+def get_session():
+    with Session(database.engine) as session:
+        yield session
+
+DbDep = Annotated[Session, Depends(get_session)]
+# ================================================================================
+
+
 def get_emp(email:str, db: DbDep):
+    from app import crud
     try:
         emp = crud.get_employee_by_email(db=db,email=email)
     except Exception as e:
@@ -62,7 +79,7 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
 
 async def get_current_emp(db:DbDep, token:str = Depends(oauth2_scheme)):
     credentials_exception = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
+        status_code=401,
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
@@ -84,7 +101,7 @@ async def get_current_active_emp(
     current_emp: schemas.EmployeeInDB = Depends(get_current_emp) ,
 ):
     if current_emp.account_status == enums.AccountStatus.INACTIVE:
-        raise HTTPException(status_code=400, detail="Inactive account")
+        raise HTTPException(status_code=400, detail="Inactive account auth error")
     return current_emp
 
 

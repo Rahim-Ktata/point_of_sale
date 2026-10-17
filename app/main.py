@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Depends
 from app import crud
-from app.dependencies import DbDep
+from app.dependencies import DbDep, OauthDep
 from app.utils.Oauth2 import get_current_active_emp
 from . import schemas
 from fastapi.middleware.cors import CORSMiddleware
@@ -9,6 +9,7 @@ from .routers import employee,employee_bulk_upload, auth, password_reset
 
 
 app = FastAPI()
+# app = appp
 
 
 
@@ -29,13 +30,13 @@ app.add_middleware(
 
 @app.get("/users/me/")
 async def read_users_me(
-    current_emp: schemas.EmployeeInDB = Depends(get_current_active_emp),
+    current_emp: OauthDep,
 ) -> schemas.EmployeeInDB:
     return current_emp
 
 @app.get("/users/me/items/")
 async def read_own_items(
-    current_user: schemas.EmployeeInDB= Depends(get_current_active_emp),
+    current_user: OauthDep,
 ):
     return [{"item_id": "Foo", "owner": current_user.first_name}]
 

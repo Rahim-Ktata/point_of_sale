@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends
-from app.dependencies import DbDep
+from app.dependencies import DbDep, OauthDep
 from app import crud, schemas, utils
 
 router = APIRouter(
@@ -8,7 +8,7 @@ router = APIRouter(
 )
 
 @router.post("/add_employee", response_model=schemas.EmployeePublic)
-async def add_employee(employee: schemas.EmployeeCreate, db: DbDep):
+async def add_employee(employee: schemas.EmployeeCreate, db: DbDep, current_emp: OauthDep):
     return await crud.create_employee(db= db, employee= employee)
 
 
@@ -24,8 +24,8 @@ def account_confirmation(accountActivation: schemas.AccountActivation, db: DbDep
         confirm_password=accountActivation.confirm_password
     )
 
-@router.patch("/edit_employee", response_model=schemas.EditEmployeeOut)
-def edit_employee(employee_id: int, entry:schemas.EditEmployeeEntry, db:DbDep):
+@router.patch("/edit_employee/{employee_id}", response_model=schemas.EditEmployeeOut)
+def edit_employee(employee_id: int, entry:schemas.EditEmployeeEntry, db:DbDep, current_emp: OauthDep):
     return crud.edit_employee(
         employee_id=employee_id,
         entry= entry, 
@@ -33,5 +33,5 @@ def edit_employee(employee_id: int, entry:schemas.EditEmployeeEntry, db:DbDep):
     )
 
 @router.get("/get_all_employees", response_model=schemas.GetAllEmployees)
-def get_employees(db:DbDep, skip: int =0, limit: int =15):
+def get_employees(db:DbDep, current_emp: OauthDep, skip: int =0, limit: int =15):
     return crud.get_all_employees(db=db, skip=skip, limit=limit)

@@ -5,11 +5,12 @@ import re
 import uuid
 
 from fastapi import FastAPI, Depends, status, HTTPException
-from app import schemas, enums, models, database, crud, utils
+from app import schemas, enums, models, database
 from sqlmodel import Field, Session, create_engine, select
 
 from app.enums.tokenStatus import TokenStatus
 from app.externel_services import email_service
+from app.utils.errors import get_err_msg
 
 def get_session():
     with Session(database.engine) as session:
@@ -260,8 +261,9 @@ def validate_employees_data_and_upload(employees: list, force_upload: bool, back
             # select * from employee where email in ("rahiim@gmail.com", "xy@gmail.com");
             duplicates = db.query(models.Employee).filter(unique_fields[field].in_(vals)).all()
         except Exception as e:
+            import crud
             crud.add_error(db=db,text=str(e))
-            raise HTTPException(status_code=500, detail=utils.get_err_msg(str(e)))
+            raise HTTPException(status_code=500, detail=get_err_msg(str(e)))
 
         if duplicates :
             used=[]
@@ -316,9 +318,10 @@ def validate_employees_data_and_upload(employees: list, force_upload: bool, back
         db.commit()
 
     except Exception as e:
+        import crud
         db.rollback()
         crud.add_error(db=db,text=str(e))
-        raise HTTPException(status_code=500, detail=utils.get_err_msg(str(e)))
+        raise HTTPException(status_code=500, detail=get_err_msg(str(e)))
 
     return schemas.EmployeeUploadResponse(
         detail="file uploaded successfully",

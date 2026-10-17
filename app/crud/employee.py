@@ -94,9 +94,14 @@ async def create_employee(db: Session, employee: schemas.EmployeeCreate):
     except Exception as e:
         db.rollback()
         crud.add_error(db=db,text=str(e))
-        raise HTTPException(status_code=500, detail=utils.get_err_msg(str(e)))
+        raise HTTPException(status_code=400, detail=utils.get_err_msg(str(e)))
 
-    return schemas.EmployeePublic(**employee_data, id=db_employee.id, roles=employee_roles)
+    return schemas.EmployeePublic(
+        **employee_data,
+        id=db_employee.id,
+        roles=employee_roles,
+        created_on=db_employee.created_on
+    )
 
 
 def edit_employee(employee_id:int, entry:schemas.EditEmployeeEntry, db:Session):
@@ -105,7 +110,8 @@ def edit_employee(employee_id:int, entry:schemas.EditEmployeeEntry, db:Session):
     try:
         emp_in_db= get_employee_by_id(db=db,id=employee_id)
     except Exception as e:
-        raise HTTPException(status_code=500, detail="sth went wrong!")
+        crud.add_error(db=db, text=str(e))
+        raise HTTPException(status_code=500, detail=utils.get_err_msg(str(e)))
     if not emp_in_db:
         raise HTTPException(status_code=400, detail="employee doesn't exist")
 
