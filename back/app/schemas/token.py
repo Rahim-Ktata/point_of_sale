@@ -1,8 +1,8 @@
 
-from app.schemas.common import MyBaseModel
+from app.schemas.common import MyBaseModel, Response
 
 
-class Token(MyBaseModel):
+class Token(Response):
     access_token: str
     token_type: str
 

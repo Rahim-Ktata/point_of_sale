@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { SidebarModule } from 'primeng/sidebar';
 import { ButtonModule } from 'primeng/button';
 import { MenubarModule } from 'primeng/menubar';
@@ -9,7 +9,8 @@ import { MenuItem } from 'primeng/api';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { Moon } from '@primeicons/angular/moon';
 import { Sun } from '@primeicons/angular/sun';
-// import { NgIf } from '../../../node_modules/@angular/common/types/_common_module-chunk';
+import { AuthService } from '../services/auth_service/auth-service';
+import {ActivatedRoute} from '@angular/router';
 
 
 @Component({
@@ -32,12 +33,14 @@ import { Sun } from '@primeicons/angular/sun';
 export class Layout implements OnInit{
   items: MenuItem[] | undefined;
   isDarkMode: boolean = false;
+
   constructor(){
     // to do : make this gets the info from the system | from cashe or whatever
     this.isDarkMode=false;
   }
 
   ngOnInit() {
+
     this.items = [
         {
             separator: true
@@ -99,6 +102,7 @@ export class Layout implements OnInit{
       }
     }
   }
+
 
   toggleDarkMode() {
       const element = document.querySelector('html');

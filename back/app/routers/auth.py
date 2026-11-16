@@ -19,6 +19,11 @@ async def login_for_access_token(
 ) -> schemas.Token:
     emp = authenticate_emp(db=db, email=form_data.username, password=form_data.password)
     if not emp:
+        # return schemas.Token(
+        #     status_code=401,
+        #     detail="Incorrect username or password",
+        #     headers={"WWW-Authenticate": "Bearer"},
+        # )
         raise HTTPException(
             status_code=401,
             detail="Incorrect username or password",
@@ -55,4 +60,4 @@ async def login_for_access_token(
     access_token = create_access_token(
         data=payload_data, expires_delta=access_token_expires
     )
-    return schemas.Token(access_token=access_token, token_type="bearer")
+    return schemas.Token(access_token=access_token, token_type="bearer", status_code=200, detail="Login successful.")

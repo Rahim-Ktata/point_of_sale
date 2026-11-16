@@ -14,7 +14,10 @@
                                 <span>First name</span>
                                 <span aria-hidden="true">*</span>
                             </label>
-                            <input pInputText id="fname" type="text" [formField]="addEmpForm.first_name" />
+                            <input pInputText
+                            id="fname" type="text" [formField]="addEmpForm.first_name" 
+                            [class.p-invalid]="addEmpForm.first_name().touched() && addEmpForm.first_name().invalid()"
+                            />
 
                             @if (addEmpForm.first_name().touched() && addEmpForm.first_name().invalid()) {
                                 @for (error of addEmpForm.first_name().errors(); track error) {
@@ -29,7 +32,8 @@
                                 <span aria-hidden="true">*</span>
                             </label>
                             <!-- <input pInputText  type="date"  /> -->
-                            <p-datepicker inputId="datetype" [showIcon]="true" dateFormat="yy-mm-dd" [formField]="addEmpForm.birth_date"/>
+                            <p-datepicker inputId="datetype"
+                            [showIcon]="true" dateFormat="yy-mm-dd" [formField]="addEmpForm.birth_date"/>
 
 
                             @if (addEmpForm.birth_date().touched() && addEmpForm.birth_date().invalid()) {
@@ -44,7 +48,10 @@
                                 <span>Email</span>
                                 <span aria-hidden="true">*</span>
                             </label>
-                            <input pInputText id="email" type="text" [formField]="addEmpForm.email" />
+                            <input pInputText
+                            id="email" type="text" [formField]="addEmpForm.email" 
+                            [class.p-invalid]="addEmpForm.email().touched() && addEmpForm.email().invalid()"
+                            />
 
                             @if (addEmpForm.email().touched() && addEmpForm.email().invalid()) {
                                 @for (error of addEmpForm.email().errors(); track error) {
@@ -58,7 +65,10 @@
                                 <span>Phone number</span>
                                 <span aria-hidden="true">*</span>
                             </label>
-                            <input pInputText id="phone" type="tel" [formField]="addEmpForm.phone_number" />
+                            <input pInputText
+                            id="phone" type="tel" [formField]="addEmpForm.phone_number" 
+                            [class.p-invalid]="addEmpForm.phone_number().touched() && addEmpForm.phone_number().invalid()"
+                            />
 
                             @if (addEmpForm.phone_number().touched() && addEmpForm.phone_number().invalid()) {
                                 @for (error of addEmpForm.phone_number().errors(); track error) {
@@ -78,7 +88,10 @@
                                 <span>Last name</span>
                                 <span aria-hidden="true">*</span>
                             </label>
-                            <input pInputText id="lname" type="text" [formField]="addEmpForm.last_name" />
+                            <input pInputText 
+                            id="lname" type="text" [formField]="addEmpForm.last_name" 
+                            [class.p-invalid]="addEmpForm.last_name().touched() && addEmpForm.last_name().invalid()"
+                            />
 
                             @if (addEmpForm.last_name().touched() && addEmpForm.last_name().invalid()) {
                                 @for (error of addEmpForm.last_name().errors(); track error) {
@@ -89,7 +102,10 @@
 
                         <div class="flex flex-col gap-1.5">
                             <label pLabel for="address">Address</label>
-                            <input pInputText id="address" type="text" [formField]="addEmpForm.address" />
+                            <input pInputText
+                            id="address" type="text" [formField]="addEmpForm.address" 
+                            [class.p-invalid]="addEmpForm.address().touched() && addEmpForm.address().invalid()"
+                            />
 
                             @if (addEmpForm.address().touched() && addEmpForm.address().invalid()) {
                                 @for (error of addEmpForm.address().errors(); track error) {
@@ -100,7 +116,10 @@
 
                         <div class="flex flex-col gap-1.5">
                             <label pLabel>Gender</label>
-                            <p-select id="gender" [options]="shared.genders" [formField]="addEmpForm.gender" optionLabel="label" optionValue="value" class="w-full md:w-56" />
+                            <p-select id="gender"
+                            [options]="shared.genders" [formField]="addEmpForm.gender" optionLabel="label" optionValue="value" class="w-full md:w-56" 
+                            [class.p-invalid]="addEmpForm.gender().touched() && addEmpForm.gender().invalid()"
+                            />
 
                             @if (addEmpForm.gender().touched() && addEmpForm.gender().invalid()) {
                                 @for (error of addEmpForm.gender().errors(); track error) {
@@ -111,7 +130,10 @@
 
                         <div class="flex flex-col gap-1.5">
                             <label pLabel for="cnss_number">Cnss number</label>
-                            <input pInputText id="cnss_number" [formField]="addEmpForm.cnss_number" />
+                            <input pInputText id="cnss_number"
+                                [formField]="addEmpForm.cnss_number" 
+                                [class.p-invalid]="addEmpForm.cnss_number().touched() &&  addEmpForm.cnss_number().invalid()"
+                             />
 
                             @if (addEmpForm.cnss_number().touched() && addEmpForm.cnss_number().invalid()) {
                                 @for (error of addEmpForm.cnss_number().errors(); track error) {

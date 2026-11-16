@@ -9,7 +9,10 @@
                                 <span>First name</span>
                                 <span aria-hidden="true">*</span>
                             </label>
-                            <input pInputText id="fname" type="text" [formField]="editEmpForm.first_name" />
+                            <input pInputText
+                            id="fname" type="text" [formField]="editEmpForm.first_name" 
+                            [class.p-invalid]="editEmpForm.first_name().touched() && editEmpForm.first_name().invalid()"
+                            />
 
                             @if (editEmpForm.first_name().touched() && editEmpForm.first_name().invalid()) {
                                 @for (error of editEmpForm.first_name().errors(); track error) {
@@ -23,7 +26,10 @@
                                 <span>Phone number</span>
                                 <span aria-hidden="true">*</span>
                             </label>
-                            <input pInputText id="phone" type="tel" [formField]="editEmpForm.phone_number" />
+                            <input pInputText
+                            id="phone" type="tel" [formField]="editEmpForm.phone_number" 
+                            [class.p-invalid]="editEmpForm.phone_number().touched() && editEmpForm.phone_number().invalid()"
+                            />
 
                             @if (editEmpForm.phone_number().touched() && editEmpForm.phone_number().invalid()) {
                                 @for (error of editEmpForm.phone_number().errors(); track error) {
@@ -40,7 +46,10 @@
                                 <span>Last name</span>
                                 <span aria-hidden="true">*</span>
                             </label>
-                            <input pInputText id="lname" type="text" [formField]="editEmpForm.last_name" />
+                            <input pInputText
+                            id="lname" type="text" [formField]="editEmpForm.last_name" 
+                            [class.p-invalid]="editEmpForm.last_name().touched() && editEmpForm.last_name().invalid()"
+                            />
 
                             @if (editEmpForm.last_name().touched() && editEmpForm.last_name().invalid()) {
                                 @for (error of editEmpForm.last_name().errors(); track error) {
@@ -51,7 +60,9 @@
 
                         <div class="flex flex-col gap-1.5">
                             <label pLabel for="account_status">Account status</label>
-                            <p-select id="account_status" [options]="shared.account_status" [formField]="editEmpForm.account_status" optionLabel="label" optionValue="value" class="w-full md:w-56" />
+                            <p-select
+                            id="account_status" [options]="shared.account_status" [formField]="editEmpForm.account_status" optionLabel="label" optionValue="value" class="w-full md:w-56" 
+                            />
 
                             @if (editEmpForm.account_status().touched() && editEmpForm.account_status().invalid()) {
                                 @for (error of editEmpForm.account_status().errors(); track error) {

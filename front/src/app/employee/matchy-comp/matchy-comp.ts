@@ -87,7 +87,7 @@ export class MatchyComp implements AfterViewInit {
               this.matchy?.cellIssues.set(key,x.issues);
             }
             this.matchy?.paintRenderedCells()
-            this.matchy?.updateErrorDisplay()
+            // this.matchy?.updateErrorDisplay()
           }
           // errs => missing col
           else if(data.errs.length>0){
