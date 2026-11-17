@@ -25,14 +25,14 @@
                                     />
                                 </g>
                             </svg> -->
-                            <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">Welcome to POS!</div>
-                            <span class="text-muted-color font-medium"> Login to continue</span>
+                            <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">Reset your password</div>
+                            <span class="text-muted-color font-medium"> Enter your email to continue</span>
                         </div>
 
 
                         <!-- <form novalidate (submit)="onSubmit($event)" class="flex flex-col gap-4"> -->
 
-                        <div class="flex flex-col gap-8">
+                        <div class="flex flex-col gap-8 mb-8">
                             <div class="flex flex-col gap-1.5">
                                 <label for="email" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">
                                     Email
@@ -40,52 +40,22 @@
                                 <input 
                                     pInputText
                                     class="w-full md:w-120 "
-                                    id="email" type="email" [formField]="loginForm.username" 
+                                    id="email" type="email" [formField]="forgetPswdForm.email" 
                                     /* fixing the issue: Bare [formField] shows red on load. */
-                                    [class.p-invalid]="loginForm.username().touched() &&  loginForm.username().invalid()"
+                                    [class.p-invalid]="forgetPswdForm.email().touched() &&  forgetPswdForm.email().invalid()"
                                 />
 
-                                @if (loginForm.username().touched() && loginForm.username().invalid()) {
-                                    @for (error of loginForm.username().errors(); track error) {
-                                    <p class="error ">{{ error.message }}</p>
-                                    }
-                                }
-                            </div>
-                            
-
-                            <div class="flex flex-col gap-1.5">
-                                <label for="pswd" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">
-                                    Password
-                                </label>
-                                <p-iconfield>
-                                    <input 
-                                    pInputPassword 
-                                    id="pswd" class="w-full md:w-120 "  [formField]="loginForm.password" [(mask)]="mask" 
-                                    [class.p-invalid]="loginForm.password().touched() &&  loginForm.password().invalid()"
-                                    />
-                                    <p-inputicon (click)="mask = !mask" style="cursor: pointer">
-                                        @if (mask) {
-                                            <svg data-p-icon="eye" [size]="20"></svg>
-                                        } @else {
-                                            <svg data-p-icon="eye-slash" [size]="20"></svg>
-                                        }
-                                    </p-inputicon>
-                                </p-iconfield>
-
-                                @if (loginForm.password().touched() && loginForm.password().invalid()) {
-                                    @for (error of loginForm.password().errors(); track error) {
+                                @if (forgetPswdForm.email().touched() &&  forgetPswdForm.email().invalid() ){
+                                    @for (error of forgetPswdForm.email().errors(); track error) {
                                     <p class="error ">{{ error.message }}</p>
                                     }
                                 }
                             </div>
                         </div>
 
-                        <div class="flex  justify-end mt-3 mb-8 ">
-                            <span class="font-medium no-underline ml-2 text-right cursor-pointer text-primary">Forgot password?</span>
-                        </div>
-
-                        <button type="button" pButton fluid routerLink="/" [disabled]="loginForm().invalid()" (click)="login()">Login</button>
+                        <button type="button" pButton fluid  [disabled]="forgetPswdForm().invalid()" (click)="forgetPswd()">Send reset password email</button>
                     </div>
                 </div>
             </div>
         </div>
+

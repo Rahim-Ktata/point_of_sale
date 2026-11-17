@@ -3,7 +3,9 @@ import { Layout } from './layout/layout';
 import { Test } from './test/test';
 import { Notfound } from './not-found/not-found'
 import { Employees } from './employee/employees/employees';
-import { LoginForm } from './login-form/login-form';
+import { LoginForm } from './auth/login-form/login-form';
+import { ForgetPswd } from './auth/forget-pswd/forget-pswd';
+
 
 export const routes: Routes = [
     {
@@ -33,6 +35,9 @@ export const routes: Routes = [
     //   {path: users/:id', component: UserDetail}, // Dynamic
 
 
+    {path: 'auth/login', component: LoginForm},
+    {path: 'auth/forget_pswd', component: ForgetPswd},
+
     {path: 'home', component: Layout, 
         children: [
             {path: 'employees', component: Employees},
@@ -44,7 +49,6 @@ export const routes: Routes = [
     //     ]
     // },
 
-    {path: 'auth/login', component: LoginForm},
     // {path: 'employees', component: Employees,     canMatch: [authGuard]},
     {path: '', component: Test},  // provide sth otherwise it goes to 404
     {path: '**', component: Notfound},  // should be last

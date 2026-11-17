@@ -6,7 +6,6 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { RippleModule } from 'primeng/ripple';
-import { OAuth2PasswordRequestForm } from '../../models/interfaces/auth';
 import { pattern, minLength, maxLength, email, form, FormField, required, minDate, maxDate, validate } from '@angular/forms/signals';
 import { InputPasswordModule } from 'primeng/inputpassword';
 import { Eye } from '@primeicons/angular/eye';
@@ -17,8 +16,9 @@ import { MessageService } from 'primeng/api';
 import { MessageModule } from 'primeng/message';
 import { Spinner } from '@primeicons/angular/spinner';
 import { ToastModule } from 'primeng/toast';
-import { AuthService } from '../services/auth_service/auth-service';
 import {Router} from '@angular/router';
+import { AuthService } from '../../services/auth_service/auth-service';
+import { OAuth2PasswordRequestForm } from '../../../models/interfaces/auth';
 
 
 @Component({

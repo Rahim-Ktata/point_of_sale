@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Service, signal } from '@angular/core';
 import { DeleteEmployeeResponse, EditEmployeeEntry, EditEmployeeOut, EmployeeCreate, EmployeePublic, EmployeeUploadResponse, GetAllEmployees, MatchyUploadEntry } from '../../../models/interfaces/employee';
 import { back_base_url } from '../../utils';
-import { OAuth2PasswordRequestForm, Token } from '../../../models/interfaces/auth';
+import { ForgetPasswordEntry, ForgetPasswordOut, OAuth2PasswordRequestForm, Token } from '../../../models/interfaces/auth';
 
 @Service()
 export class AuthService {
@@ -43,6 +43,10 @@ export class AuthService {
     }
     saveToken(token:string){
         localStorage.setItem('token',token);
+    }
+
+    sendForgetPswdEmail(entry: ForgetPasswordEntry){
+        return this.http.post<ForgetPasswordOut>(back_base_url + "forget_password", {params:entry})
     }
 
 }

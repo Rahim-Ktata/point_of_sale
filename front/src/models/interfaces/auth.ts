@@ -24,3 +24,17 @@ export interface Token extends Response{
 export interface TokenData{
     email: string
 }
+
+
+export interface ForgetPasswordOut extends Response{}
+export interface ForgetPasswordEntry {
+    email: string
+}
+
+export interface ResetPasswordEntry{
+    token : string
+    password : string
+    confirm_password : string
+}
+
+export interface ResetPasswordOut extends Response{}
