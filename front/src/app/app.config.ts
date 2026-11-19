@@ -3,11 +3,14 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { providePrimeNG } from 'primeng/config';
 import { MyPreset } from './mypreset';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { authInterceptor } from './interceptors/auth_interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideHttpClient(),
+    provideHttpClient(
+      withInterceptors([authInterceptor])
+    ),
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
     providePrimeNG({
@@ -22,8 +25,8 @@ export const appConfig: ApplicationConfig = {
               // darkModeSelector: 'dark',
               cssLayer: false,
               // cssLayer: {
-              //   // name: 'primeng',
-              //   order: 'tailwind, primeng',
+              //   name: 'primeng',
+              //   order: 'tailwind, app-styles , primeng,',
               // },
               cssVariables: true
           }

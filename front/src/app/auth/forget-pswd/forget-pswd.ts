@@ -8,8 +8,6 @@ import { PasswordModule } from 'primeng/password';
 import { RippleModule } from 'primeng/ripple';
 import { pattern, minLength, maxLength, email, form, FormField, required, minDate, maxDate, validate } from '@angular/forms/signals';
 import { InputPasswordModule } from 'primeng/inputpassword';
-import { Eye } from '@primeicons/angular/eye';
-import { EyeSlash } from '@primeicons/angular/eye-slash';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { MessageService } from 'primeng/api';
@@ -24,8 +22,6 @@ import { ForgetPasswordEntry, OAuth2PasswordRequestForm } from '../../../models/
   imports: [
     ToastModule,
     MessageModule,
-    Eye,
-    EyeSlash,
     IconFieldModule,
     InputIconModule,
     InputPasswordModule,
@@ -74,8 +70,6 @@ export class ForgetPswd {
 
           if(data.status_code == 200){
             this.messageService.add({ severity: 'success', summary: 'Saved successfully', detail: data.detail });
-            // redirect
-            // this.router.navigate(['/home/employees']);
           }
           else{
             this.messageService.add({ severity: 'error', summary: 'Something went wrong', detail: data.detail });
@@ -83,44 +77,15 @@ export class ForgetPswd {
         },
         error:(err)=>{
           this.messageService.clear('promise');
-          console.log(err)
-          if(err.name=="HttpErrorResponse"){
-            this.messageService.add({ severity: 'error', summary: 'Something went wrong', detail: err.statusText });
-          }
-          else if(err.error.detail){
+          
+          if(err.error.detail){
             this.messageService.add({ severity: 'error', summary: 'Something went wrong', detail: err.error.detail });
           }
           else
             this.messageService.add({ severity: 'error', summary: 'Something went wrong', detail: "We couldn’t complete the action." });
-
         }
       })
   }
 
-
-  // public login(){
-  //     this.messageService.add({
-  //         severity: 'secondary',
-  //         summary: 'Please wait...',
-  //         detail: 'Verifying credentials.',
-  //         icon: 'pi pi-spinner pi-spin',
-  //         key: 'promise',
-  //         sticky: true
-  //     });
-
-  //     this.authService.getToken(
-  //       this.loginModel()
-  //     )
-  //       .subscribe({
-
-  //         next:(data)=>{
-  //           this.messageService.clear('promise');
-  //           // a toast
-  //           console.log(data)
-  //         },
-  //         error:(err)=>{
-  //           console.log(err)
-  //     })
-  // }
 }
 

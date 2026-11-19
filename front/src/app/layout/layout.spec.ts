@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+                        import { Dollar } from '@primeicons/angular/dollar';
 import { Layout } from './layout';
 
 describe('Layout', () => {

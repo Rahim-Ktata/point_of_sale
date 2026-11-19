@@ -11,6 +11,7 @@ from app.models import Employee, EmployeeRole
 
 from sqlalchemy.orm import Session
 from app.externel_services import email_service
+from app.config import settings
 
 
 def get_employee_by_id(db: Session, id: int):
@@ -97,7 +98,7 @@ async def create_employee(db: Session, employee: schemas.EmployeeCreate):
         #TODO: make this done after the commit with possibility to resend
         await email_service.simple_send(
             emails= [employee.email],
-            body={**employee_data,'token':db_token.token},
+            body={**employee_data,'token':db_token.token, 'front_base_url':settings.front_base_url},
             template_name=enums.emailTemplates.EmailTemplate.ACCOUNT_ACTIVATION.value
         )
 

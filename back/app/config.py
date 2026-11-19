@@ -27,5 +27,8 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file="app/.env")
     TEST_DB_URL: str
 
+    back_base_url :str
+    front_base_url: str
+
 # settings = Settings(_env_file='app/.env')
 settings = Settings()

@@ -10,6 +10,7 @@ from app.dependencies import DbDep
 from app.enums.tokenStatus import TokenStatus
 from app.externel_services import email_service
 from app.models.employee import Employee
+from app.config import settings
 
 
 
@@ -44,7 +45,9 @@ async def send_reset_code_email(email:str, db:DbDep):
                 'first_name':emp.first_name,
                 'last_name':emp.last_name,
                 'email':email,
-                'token':db_token.token
+                'token':db_token.token,
+                'front_base_url':settings.front_base_url,
+                'access_token_expire_minutes':settings.access_token_expire_minutes,
             },
             template_name=enums.EmailTemplate.PASSWORD_RESET.value
         )
@@ -56,7 +59,7 @@ async def send_reset_code_email(email:str, db:DbDep):
         raise HTTPException(status_code=500, detail=utils.get_err_msg(str(e)))
 
     #TODO: fix status_code isn't string
-    return schemas.ForgetPasswordOut(msg="email sent successfully", status_code=200)
+    return schemas.ForgetPasswordOut(detail="email sent successfully", status_code=200)
 
 
 
@@ -123,7 +126,7 @@ def reset_password(
 
     # ------------------- update token status to used ------------------------
     update_pswd_reset_token_status(db=db, status= TokenStatus.USED, reset_pswd_token_id= token_db.id)
-
+# 
     # ------------------- hash password add it to db -------------------------
     hashed_password = utils.get_password_hash(password)
     try:

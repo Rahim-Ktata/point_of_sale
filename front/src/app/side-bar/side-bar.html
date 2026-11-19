@@ -1,0 +1,41 @@
+<p-sidebar-layout [dt]="sidebardt">
+    <p-sidebar  [open]="false" [variant]="'floating'" >
+        <p-sidebar-spacer />
+        <p-sidebar-aside rounded-2xl>
+            <p-sidebar-panel>
+                <p-sidebar-header>
+                            <button pButton variant="text" severity="primary">
+                                    <h1 style="font-weight:bolder;">POS</h1>
+                            </button>
+                </p-sidebar-header>
+                <p-sidebar-content>
+                    <p-sidebar-menu>
+                        <p-sidebar-menu-item>
+                            <button pSidebarMenuButton  [isActive]="isDashboardActive()" (click)="isactive('')" routerLinkActive="data-active" routerLink="/home/dashboard" pTooltip="Dashboard" >
+                                <svg data-p-icon="th-large"></svg>
+                            </button>
+                        </p-sidebar-menu-item>
+                        <p-sidebar-menu-item>
+                            <button pSidebarMenuButton [isActive]="isCustomersActive()" routerLink="/home/customers" pTooltip="Customers">
+                                <svg data-p-icon="users"></svg>
+                            </button>
+                        </p-sidebar-menu-item>
+                        <p-sidebar-menu-item>
+                            <button pSidebarMenuButton  [isActive]="isEmployeesActive()" routerLink="/home/employees" pTooltip="Employees">
+                                <svg data-p-icon="briefcase"></svg>
+                            </button>
+                        </p-sidebar-menu-item>
+                    </p-sidebar-menu>
+
+                </p-sidebar-content>
+                <p-sidebar-footer>...</p-sidebar-footer>
+            </p-sidebar-panel>
+        </p-sidebar-aside>
+    </p-sidebar>
+    <p-sidebar-main>
+        <!-- page content -->
+        <div class="flex maincontiner" style="margin: 24px; margin-left:10px;">
+            <router-outlet></router-outlet>
+        </div>
+    </p-sidebar-main>
+</p-sidebar-layout>

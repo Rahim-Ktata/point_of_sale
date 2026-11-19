@@ -1,0 +1,105 @@
+
+App shell layout : side bar + top bar
+
+<p-sidebar-layout [dt]="sidebardt">
+    <p-sidebar  id="sidebar" [open]="false" [variant]="'floating'" [collapsible]="'icon'">
+        <p-sidebar-spacer />
+        <p-sidebar-aside>
+            <p-sidebar-panel>
+                <p-sidebar-header>
+
+                    <div class="flex gap ">
+                        <!-- <svg class=" mb-8 shrink-0"  height="40" viewBox="0 0 611.998 611.998" >
+                            <g>
+                                <path fill="var(--p-primary-color)" d="M506.382,480.901c0,19.249-15.598,34.848-34.847,34.848h-19.988v41.971c0,29.912-24.337,54.278-54.266,54.278H214.678
+                                    c-29.912,0-54.266-24.352-54.266-54.278v-41.971h-19.976c-19.249,0-34.847-15.599-34.847-34.848
+                                    c0-19.264,15.598-34.848,34.847-34.848h331.084C490.784,446.054,506.382,461.652,506.382,480.901z M582.811,77.279v268.97
+                                    c0,42.626-34.666,77.294-77.279,77.294H106.467c-42.612,0-77.279-34.668-77.279-77.294V77.279C29.188,34.666,63.855,0,106.467,0
+                                    h399.064C548.143,0,582.811,34.666,582.811,77.279z M513.114,77.279c0-4.182-3.4-7.583-7.583-7.583H106.467
+                                    c-4.182,0-7.583,3.4-7.583,7.583v268.97c0,4.183,3.401,7.597,7.583,7.597h399.064c4.183,0,7.583-3.414,7.583-7.597V77.279z
+                                    M447.934,265.751h-97.575c-7.694,0-13.938,6.244-13.938,13.939v27.878c0,7.695,6.244,13.939,13.938,13.939h97.575
+                                    c7.695,0,13.939-6.244,13.939-13.939V279.69C461.873,271.995,455.629,265.751,447.934,265.751z M447.934,114.664h-97.575
+                                    c-7.694,0-13.938,6.245-13.938,13.939v27.879c0,7.695,6.244,13.939,13.938,13.939h97.575c7.695,0,13.939-6.245,13.939-13.939
+                                    v-27.879C461.873,120.895,455.629,114.664,447.934,114.664z M447.934,190.199h-97.575c-7.694,0-13.938,6.245-13.938,13.939v27.879
+                                    c0,7.695,6.244,13.939,13.938,13.939h97.575c7.695,0,13.939-6.244,13.939-13.939v-27.879
+                                    C461.873,196.446,455.629,190.199,447.934,190.199z M222.147,202.105c-26.679-6.816-33.272-10.121-33.272-20.253v-0.447
+                                    c0-7.499,6.83-13.438,19.821-13.438c10.579,0,21.159,3.75,32.409,10.372c2.634,1.546,5.27,2.426,8.586,2.426
+                                    c8.809,0,15.863-6.845,15.863-15.653c0-6.607-3.764-11.249-7.513-13.438c-9.716-6.175-20.7-10.288-32.799-12.252V127.81
+                                    c0-8.113-6.565-14.678-14.664-14.678c-8.113,0-14.678,6.565-14.678,14.678v11.485c-24.323,4.488-40.731,21.34-40.731,45.19v0.433
+                                    c0,30.639,20.06,39.239,51.114,47.156c25.788,6.608,31.071,11.026,31.071,19.599v0.447c0,9.019-8.378,14.539-22.26,14.539
+                                    c-14.984,0-27.752-5.284-39.434-13.884c-2.203-1.534-5.283-3.066-9.673-3.066c-8.823,0-15.863,6.816-15.863,15.641
+                                    c0,5.269,2.634,10.147,6.383,12.768c11.932,8.558,25.481,13.954,39.407,16.587v12.127c0,8.1,6.564,14.678,14.678,14.678
+                                    c8.099,0,14.664-6.578,14.664-14.678v-10.899c27.377-3.401,45.818-19.947,45.818-47.1v-0.459
+                                    C271.06,221.507,253.428,210.259,222.147,202.105z"/>
+                            </g>
+                        </svg> -->
+                        <svg data-p-icon="dollar" [size]="32" color="var(--p-primary-color)"></svg>
+
+                        <!-- <h1 class="text-surface-600 dark:text-surface-0 font-bold text-3xl lg:text-5xl mb-2">POS</h1> -->
+                    </div>
+                </p-sidebar-header>
+                <p-sidebar-content>
+                    <p-sidebar-menu>
+
+                        <!-- using menu cuz provides router link, command... organized in ts -->
+                        <p-menu [model]="items" [dt]="sideBarMenudt" >
+                            <ng-template #item let-item>
+                                <p-sidebar-menu-item>
+                                    <!-- wrapping menu items in sidebarMenuBtn so the animation for the side bar -->
+                                    <button pSidebarMenuButton [isActive]="false" [routerLink]="item.routerLink">
+                                        <!-- syntax from ngdocs/menu/templates -->
+                                        <span [class]="item.icon" ></span>
+                                        <span>{{ item.label }}</span>
+                                    </button>
+                                </p-sidebar-menu-item>
+                            </ng-template>
+                        </p-menu>
+
+                    </p-sidebar-menu>
+                </p-sidebar-content>
+                <p-sidebar-footer>...</p-sidebar-footer>
+            </p-sidebar-panel>
+        </p-sidebar-aside>
+    </p-sidebar>
+    <p-sidebar-main >
+        <!-- page content -->
+
+
+        <!-- ------------- top bar --------------------- (placed here so that the sidebar toggle works)  -->
+        <p-menubar [dt]="menubardt">
+            <ng-template #start>
+                <button pButton pSidebarTrigger target="sidebar"  variant="text" severity="contrast">
+                    <svg data-p-icon="bars"></svg>
+                </button>
+            </ng-template>
+
+            <ng-template #end>
+                <button type="button" pButton iconOnly variant="text" severity="contrast" (click)="toggleDarkMode()">
+                    @if(isDarkMode){
+                        <svg  data-p-icon="moon"></svg>
+                    }
+                    @else{
+                        <svg  data-p-icon="sun"></svg>
+                    }
+                </button>
+                <button pButton variant="text" severity="danger"><svg data-p-icon="sign-out"></svg> Logout</button>
+            </ng-template>
+        </p-menubar>
+        <!-- ------------- top bar --------------------- -->
+
+        <div class="bg-surface-100 dark:bg-surface-950 flex items-center justify-center min-h-screen min-w-screen overflow-hidden">
+            <router-outlet />
+        </div>
+
+    </p-sidebar-main>
+</p-sidebar-layout>
+
+
+
+
+
+
+
+
+
+

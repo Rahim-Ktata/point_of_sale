@@ -8,7 +8,7 @@ router = APIRouter(
     tags=["Password Reset"]
 )
 
-@router.post("/forget_password", response_model=schemas.ForgetPasswordOut)
+@router.get("/forget_password", response_model=schemas.ForgetPasswordOut)
 async def send_reset_pswd_email(email: str, db: DbDep):
     # return schemas.ForgetPasswordOut(msg='hi', status_code=1)
     return await crud.send_reset_code_email(email=email, db=db)

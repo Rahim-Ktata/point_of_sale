@@ -4,7 +4,7 @@ import Material from '@primeuix/themes/material';
 import Aura from '@primeuix/themes/aura';
 import Lara from '@primeuix/themes/lara';
 
-export const MyPreset = definePreset(Lara, {
+export const MyPreset = definePreset(Material, {
     //Your customizations, see the following sections for examples
     semantic: {
         typography: {

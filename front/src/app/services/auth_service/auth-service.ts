@@ -2,11 +2,13 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Service, signal } from '@angular/core';
 import { DeleteEmployeeResponse, EditEmployeeEntry, EditEmployeeOut, EmployeeCreate, EmployeePublic, EmployeeUploadResponse, GetAllEmployees, MatchyUploadEntry } from '../../../models/interfaces/employee';
 import { back_base_url } from '../../utils';
-import { ForgetPasswordEntry, ForgetPasswordOut, OAuth2PasswordRequestForm, Token } from '../../../models/interfaces/auth';
+import { AccountActivation, AccountActivationOut, ForgetPasswordEntry, ForgetPasswordOut, OAuth2PasswordRequestForm, ResetPasswordEntry, ResetPasswordOut, Token } from '../../../models/interfaces/auth';
+import { Router } from '@angular/router';
 
 @Service()
 export class AuthService {
 
+    private router = inject(Router);
     private http = inject(HttpClient);
     isAuthenticated = signal<boolean>(localStorage.getItem('token')?true:false);
 
@@ -32,6 +34,11 @@ export class AuthService {
     //     // else {this.isAuthenticated.set(false);}
     //     return token? true: false;
     // }
+    getAuthToken(){
+        const authToken = localStorage.getItem('token');
+        if(!authToken) return '';
+        else return authToken;
+    }
     getToken(entry: OAuth2PasswordRequestForm){
         const formData = new FormData();
         formData.append('username', entry.username);
@@ -46,9 +53,49 @@ export class AuthService {
     }
 
     sendForgetPswdEmail(entry: ForgetPasswordEntry){
-        return this.http.post<ForgetPasswordOut>(back_base_url + "forget_password", {params:entry})
+        return this.http.get<ForgetPasswordOut>(back_base_url + "forget_password", 
+            {params:{
+                email:entry.email
+            }}
+        )
     }
 
+    resetPswd(entry: ResetPasswordEntry){
+        return this.http.post<ResetPasswordOut>(back_base_url + "reset_password",entry)
+    }
+
+    activateAccount(entry: AccountActivation){
+        return this.http.patch<AccountActivationOut>(back_base_url + "employee/confirm_account",entry)
+    }
+
+    hasRole(role:string){
+        // return true;
+        const payload = localStorage.getItem('token')?.split('.')[1];
+        if(!payload){
+            this.router.navigate(['/auth/login'])
+            return false;
+        }
+        const payload_decoded = atob(payload)
+        const payload_json = JSON.parse(payload_decoded);
+        let roles;
+        if(payload_json['roles'].includes(',')){
+            roles = payload_json['roles'].split[','];
+        }
+        else{
+            roles = payload_json['roles'];
+        }
+        if(!roles) {
+            this.router.navigate(['/auth/login'])
+            return false;
+        }
+        if(roles.includes(role)){
+            return true;
+        }
+        else {
+            this.router.navigate(['/auth/access'])
+            return false;
+        }
+    }
 }
 
 

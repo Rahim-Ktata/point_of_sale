@@ -1,0 +1,60 @@
+
+.maincontainer{
+    background-color: blue;
+    margin-top: 18px;
+}
+
+.p-sidebar-panel{
+    /* width: 100px; */
+    border-radius: 12px !important;
+}
+.p-sidebar-layout{
+    /* width: 100px; */
+}
+.p-sidebar{
+    margin: 10px;
+    /* this is defined as inline style, so u can't override it here,
+    <p-sidebar style="--px-sidebar-width: 16rem; --px-sidebar-width-icon: 3rem;">
+    that's why important is added */
+    --px-sidebar-width-icon: 4rem  !important;
+}
+
+.p-sidebar-aside{
+    /* padding:10px !important; */
+    /* margin: 10px; */
+    /* width: var(--px-sidebar-width-icon); */
+    /* width: 200px; */
+}
+
+.p-sidebar-menu-button{
+    /* margin:auto; */
+    padding: 0.7rem !important;
+    border-radius: 6px;
+    /* display: flex; */
+    width: auto !important;
+    /* background-color: blue; */
+    /* padding-left:0px; */
+}
+.p-sidebar-menu-item{
+    /* display: flex; */
+    /* width: auto !important; */
+    /* padding:10px; */
+}
+.p-sidebar-menu{
+
+    /* width: 100px; */
+    gap: 10px;
+    padding: 10px;
+}
+.p-sidebar-content{
+
+    /* width: 100px; */
+    /* background-color: blue; */
+    /* display: flex;
+    flex-direction: column;
+    gap: 100px; */
+}
+
+.px-sidebar-width-icon{
+
+}

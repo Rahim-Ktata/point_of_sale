@@ -101,7 +101,7 @@ async def get_current_active_emp(
     current_emp: schemas.EmployeeInDB = Depends(get_current_emp) ,
 ):
     if current_emp.account_status == enums.AccountStatus.INACTIVE:
-        raise HTTPException(status_code=400, detail="Inactive account auth error")
+        raise HTTPException(status_code=400, detail="Inactive account")
     return current_emp
 
 

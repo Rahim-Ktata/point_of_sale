@@ -24,7 +24,7 @@ def test_forget_password(test_db):
         json= confirm_entry
     )
 
-    response = client.post(
+    response = client.get(
         "/forget_password",
         # we use params= not json=
         params = {
@@ -37,7 +37,7 @@ def test_forget_password(test_db):
 
 
 def test_forget_password_invalid_mail(test_db):
-    response = client.post(
+    response = client.get(
         "/forget_password",
         params = {
             "email":"1",
@@ -54,7 +54,7 @@ def test_forget_password_inactive_account(test_db):
         "/employee/add_employee",
         json= data
     )
-    response = client.post(
+    response = client.get(
         "/forget_password",
         params = {
             "email":"abdrrahimktata@gmail.com",
@@ -86,7 +86,7 @@ def test_reset_password(test_db):
     )
 
     # ----- store pswd reset token -------
-    res = client.post(
+    res = client.get(
         "/forget_password",
         params={"email":"abdrrahimktata@gmail.com"}
     )

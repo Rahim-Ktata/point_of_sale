@@ -55,4 +55,4 @@ def update_account_status_and_pswd(session : Session, token_code:str, password:A
 
     session.commit()
 
-    return schemas.AccountActivationOut(msg="account confirmed", status_code=status.HTTP_200_OK)
+    return schemas.AccountActivationOut(detail="account confirmed", status_code=200)
